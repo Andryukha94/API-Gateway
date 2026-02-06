@@ -13,4 +13,6 @@ spring:
             - id: flow-manager
               uri: ${FLOW_MANAGER_URL:http://localhost:8081}
               predicates:
-                - Path=/files/**
+                - Path=/flow-manager/**
+              filters:
+                - StripPrefix=1
