@@ -1,0 +1,16 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: flow-manager
+              uri: ${FLOW_MANAGER_URL:http://localhost:8081}
+              predicates:
+                - Path=/files/**
