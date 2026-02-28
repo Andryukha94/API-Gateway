@@ -1,6 +1,9 @@
 server:
   port: 8088
 
+  error:
+    include-message: always
+
 spring:
   application:
     name: api-gateway
@@ -11,14 +14,36 @@ spring:
         jwt:
           issuer-uri: http://localhost:8090/realms/flow
 
+  http:
+    codecs:
+      max-in-memory-size: 600MB
+
+  webflux:
+    multipart:
+      max-in-memory-size: 50MB
+      max-disk-usage-per-part: 600MB
+      max-parts: 200
+      max-headers-size: 64KB
+
   cloud:
     gateway:
       server:
         webflux:
+          form-filter:
+            enabled: false
           routes:
             - id: flow-manager
-              uri: ${FLOW_MANAGER_URL:http://localhost:8081}
+              uri: http://localhost:8081
               predicates:
                 - Path=/flow-manager/**
               filters:
                 - StripPrefix=1
+
+app:
+  security:
+    user-login-header: X-User-Login
+    user-login-claim: preferred_username
+
+logging:
+  level:
+    root: INFO
